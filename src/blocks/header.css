@@ -1,0 +1,98 @@
+.header {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 30px 80px 40px;
+}
+
+.header--saved-news {
+  height: auto;
+  padding: 30px 80px;
+  background-color: #ffffff;
+}
+
+.header--search-news {
+  background-image: url("../images/fondo-header.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.nav__links {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.nav__link {
+  color: white;
+  text-decoration: none;
+  transition: opacity 0.3s;
+  padding: 13px 0px;
+}
+
+.nav__link:hover {
+  opacity: 0.8;
+}
+
+.nav__link:focus {
+  border-bottom: 2px solid white;
+}
+
+.header__line {
+  width: 100vw;
+  margin: 0;
+  border: none;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.411);
+  position: relative;
+  left: 50%;
+  right: 50%;
+  transform: translateX(-50%);
+}
+
+.nav__button {
+  padding: 10px 25px;
+  border-radius: 25px;
+  border: 1px solid #ffffff;
+  background: transparent;
+  color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.header__text {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  gap: 10px;
+  text-align: center;
+  margin: auto;
+}
+
+.heading__text-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+}
+
+.text-break-line {
+  display: inline-block;
+  width: 100%;
+}
