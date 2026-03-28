@@ -1,18 +1,14 @@
 export const Popup = ({ isOpen, onClose, title, children }) => {
   return (
     <div
-      className={`popup ${isOpen ? "popup_opened" : ""}`}
+      className={`popup ${isOpen ? "popup--opened" : ""}`}
       onMouseDown={(e) => {
         if (e.target.classList.contains("popup")) {
           onClose();
         }
       }}
     >
-      <div
-        className={`${
-          !title ? "popup__container_type_image" : "popup__content"
-        }`}
-      >
+      <div className="popup__content">
         <button
           aria-label="Close modal"
           className="popup__close"

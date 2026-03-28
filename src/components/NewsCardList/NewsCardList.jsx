@@ -11,17 +11,17 @@ export const NewsCardList = ({ news }) => {
   const visibleNews = news.slice(0, visibleCount);
 
   return (
-    <div className="content__card">
-      <h2> Resultados de la busquedad</h2>
+    <div className="news-list">
+      <h2 className="news-list__title"> Resultados de la busquedad</h2>
 
-      <ul className="cards__list">
+      <ul className="news-list__cards ">
         {visibleNews.map((article, index) => (
           <NewsCard key={index} article={article} />
         ))}
       </ul>
 
       {visibleCount < news.length && (
-        <button className="vermas" onClick={handleShowMore}>
+        <button className="news-list__button" onClick={handleShowMore}>
           Mostrar más
         </button>
       )}

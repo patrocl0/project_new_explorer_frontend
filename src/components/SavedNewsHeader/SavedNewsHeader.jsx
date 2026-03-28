@@ -1,13 +1,13 @@
 export const SavedNewsHeader = () => {
   return (
-    <div className="header__content">
-      <div className="header__text">
-        <h2 className="heading__text-title">
-          <span className="text-break-line">Tus artículos</span>
+    <div className="header__saved_news">
+      <div className="header__saved_news_text">
+        <p>Articulos Guardados</p>
+        <h2 className="header__saved_news_title">
+          Elise , tienes 5 articulos{" "}
+          <span className="text-break-line">guardados</span>
         </h2>
-        <p>
-          Aquí tienes acceso a todos los artículos que has guardado en tu cuenta personal.
-        </p>
+        <p>Por palabras clave : Naturaleza, Tellowstone y 2 mas</p>
       </div>
     </div>
   );

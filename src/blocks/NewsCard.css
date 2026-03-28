@@ -29,33 +29,52 @@
   border-radius: 8px;
 }
 
-.card__delete-info {
+.card__tooltip {
   position: absolute;
   top: 10px;
   right: 50px;
-  padding: 4px 4px;
+  padding: 10px 20px;
   background: white;
   cursor: pointer;
   color: black;
   border: none;
   border-radius: 8px;
+  margin: 0;
+  font-size: 10px;
 }
 
-.card__delete {
+.card__action {
   position: absolute;
   top: 10px;
   right: 15px;
+  background: white;
   border: none;
-  background-color: transparent;
+  border-radius: 6px;
+  padding: 6px;
   cursor: pointer;
-  color: white;
 }
 
-.card__info {
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.card__action i {
+  font-size: 15px;
+  color: #b6bcbf; /* normal gris */
+  transition: color 0.3s ease;
+}
+
+.card__action:hover i {
+  color: black; /* hover negro */
+}
+
+/* seleccionado */
+.card__action--active i {
+  color: #2f71e5;
+}
+
+.card__action--remove i {
+  color: #b6bcbf;
+}
+
+.card__content {
+  padding: 24px;
 }
 
 .card__date {
@@ -99,5 +118,11 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@media (max-width: 544px) {
+  .card__tooltip {
+    font-size: 9px;
   }
 }

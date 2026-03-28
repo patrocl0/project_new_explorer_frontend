@@ -26,9 +26,7 @@ export const Main = ({ news, hasSearched, isLoading, error }) => {
           </section>
         ) : null}
 
-        <section className="about">
-          <About />
-        </section>
+        <About />
       </div>
     </main>
   );

@@ -1,13 +1,19 @@
 export const Footer = () => {
   return (
     <div className="footer">
-      <p className="footer__text">© 2025. Stiven Mora</p>
+      <p className="footer__text">© 2026 Supersite, Powered by News API</p>
       <div className="footer__enlaces">
         <a href="">Inicio</a>
         <a href="">Tripleten </a>
-        <a href="">Logo Git</a>
-        <a href="">Logo Linke</a>
-        <a href="">Portaforlio</a>
+        <a href="">
+          <i className="fa-brands fa-github"></i>
+        </a>
+        <a href="">
+          <i className="fa-brands fa-linkedin"></i>
+        </a>
+        <a href="">
+          <i className="fa-solid fa-briefcase"></i>
+        </a>
       </div>
     </div>
   );

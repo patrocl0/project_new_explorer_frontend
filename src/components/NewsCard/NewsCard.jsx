@@ -1,7 +1,18 @@
-import React from "react";
-import fondo from "../../images/fondo-header.jpg";
+import React, { useContext, useState } from "react";
+import fondo from "../../images/news.jpg";
+import { AppContext } from "../../context/AppContext";
+import { useLocation } from "react-router-dom";
 
 export const NewsCard = ({ article }) => {
+  const location = useLocation();
+  const isOnSavedNews = location.pathname === "/saved-news";
+
+  const [isSaved, setIsSaved] = useState(false);
+  const [isHover, setIsHover] = useState(false);
+
+  const handleToggle = () => {
+    setIsSaved(!isSaved);
+  };
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("es-ES", {
@@ -19,24 +30,64 @@ export const NewsCard = ({ article }) => {
         alt={article.title}
       />
 
-      <button aria-label="Search card" className="card__search" type="button">
+      {/* <button aria-label="Search card" className="card__search" type="button">
         {" "}
         search
-      </button>
+      </button> */}
+
+      {/* hover */}
+      <p className="card__tooltip">
+        {isOnSavedNews
+          ? "Remove from saved"
+          : "Inicia sesión para guardar artículos"}
+      </p>
 
       <button
-        aria-label="Delete card"
-        className="card__delete-info"
+        className={`card__action ${
+          isSaved ? "card__action--active" : ""
+        } ${isOnSavedNews ? "card__action--remove" : "card__action--save"}`}
+        onClick={handleToggle}
         type="button"
+        aria-label={isOnSavedNews ? "Eliminar artículo" : "Guardar artículo"}
       >
-        Remove from saved
+        <i
+          className={
+            isOnSavedNews
+              ? "fa-regular fa-trash-can"
+              : isSaved
+                ? "fa-solid fa-bookmark"
+                : "fa-regular fa-bookmark"
+          }
+        ></i>
       </button>
 
-      <button aria-label="Delete card" className="card__delete" type="button">
-        <i className="fa-solid fa-trash"></i>
-      </button>
+      {/* {isOnSavedNews ? (
+        <button
+          className={`card__icon ${isSaved ? "card__icon--active" : ""}`}
+          onClick={handleToggle}
+          onMouseEnter={() => setIsHover(true)}
+          onMouseLeave={() => setIsHover(false)}
+          type="button"
+        >
+          <i className="fa-regular fa-trash-can"></i>
+        </button>
+      ) : (
+        <button
+          className={`card__icon ${isSaved ? "card__icon--active" : ""}`}
+          onClick={handleToggle}
+          onMouseEnter={() => setIsHover(true)}
+          onMouseLeave={() => setIsHover(false)}
+          type="button"
+        >
+          <i
+            className={
+              isSaved ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark"
+            }
+          ></i>
+        </button>
+      )} */}
 
-      <div className="card__info">
+      <div className="card__content">
         <p className="card__date">{formatDate(article.publishedAt)}</p>
         <h2 className="card__title">{article.title}</h2>
         <p className="card__description">{article.description}</p>

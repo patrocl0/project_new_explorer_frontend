@@ -5,7 +5,7 @@ export const SearchHeader = ({ onSearch }) => {
     <div className="header__content">
       <div className="header__text">
         <h2 className="heading__text-title">
-          ¿Qué esta pasando{" "}
+          ¿Qué esta pasando
           <span className="text-break-line">en el mundo?</span>
         </h2>
         <p>

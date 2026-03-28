@@ -8,6 +8,7 @@ import { ModalWithForm } from "../ModalWithForm";
 import { SavedNews } from "../SavedNews/SavedNews";
 import { searchNews } from "../../utils/newsApi";
 import { AppContext } from "../../context/AppContext";
+import { InfoTooltip } from "../../tooltip/infoTooltip";
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +17,8 @@ export const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [news, setNews] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState(null);
 
   const [data, setData] = useState({
@@ -63,6 +66,14 @@ export const App = () => {
     // Aquí agregamos la lógica de autenticación
     setIsLoggedIn(true);
     setIsLoginModalOpen(false);
+
+    setIsSuccess(true);
+    setIsTooltipOpen(true);
+
+    // setTimeout(() => {
+    //   setIsSuccess(false);
+    //   setIsTooltipOpen(false);
+    // }, 1500);
   };
 
   const handleRegisterSubmit = (data) => {
@@ -114,7 +125,7 @@ export const App = () => {
               />
             }
           />
-          <Route path="/saved-news" element={<SavedNews />} />
+          <Route path="/saved-news" element={<SavedNews news={news} />} />
         </Routes>
 
         <Footer />
@@ -219,6 +230,12 @@ export const App = () => {
             </button>
           </p>
         </ModalWithForm>
+
+        <InfoTooltip
+          isOpen={isTooltipOpen}
+          success={isSuccess}
+          onClose={() => setIsTooltipOpen(false)}
+        />
       </div>
     </AppContext.Provider>
   );
