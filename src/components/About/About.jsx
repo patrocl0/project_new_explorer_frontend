@@ -1,4 +1,4 @@
-import React from "react";
+import "./about.css";
 import stivenImg from "../../images/stiven.jpg";
 
 export const About = () => {

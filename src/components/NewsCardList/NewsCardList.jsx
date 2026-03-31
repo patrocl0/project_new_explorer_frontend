@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import "./NewsCardList.css";
+import { useState } from "react";
 import { NewsCard } from "../NewsCard/NewsCard";
 
 export const NewsCardList = ({ news }) => {

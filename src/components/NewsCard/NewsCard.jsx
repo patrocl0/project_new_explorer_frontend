@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import "./NewsCard.css";
+import { useContext, useState } from "react";
 import fondo from "../../images/news.jpg";
 import { AppContext } from "../../context/AppContext";
 import { useLocation } from "react-router-dom";

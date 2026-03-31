@@ -1,4 +1,4 @@
-import "../../blocks/Preloader.css";
+import "./Preloader.css";
 
 export const Preloader = () => {
   return (

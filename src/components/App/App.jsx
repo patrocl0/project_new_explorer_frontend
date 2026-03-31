@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import "./App.css";
 import { Header } from "../Header/Header";
 import { Route, Routes } from "react-router-dom";
-import { About } from "../About/About";
 import { Main } from "../Main/Main";
 import { Footer } from "../Footer/Footer";
 import { ModalWithForm } from "../ModalWithForm";

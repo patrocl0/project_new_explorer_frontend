@@ -1,8 +1,10 @@
-import React, { useContext, useState } from "react";
+import "./header.css";
+import { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { SearchHeader } from "../SearchHeader/SearchHeader";
 import { SavedNewsHeader } from "../SavedNewsHeader/SavedNewsHeader";
 import { AppContext } from "../../context/AppContext";
+import { Navigation } from "../Navigation/Navigation";
 
 export const Header = ({ onOpenLoginModal, onSearch }) => {
   const { setIsLoggedIn, isLoggedIn } = useContext(AppContext);
@@ -10,8 +12,8 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
 
   const location = useLocation();
   const isOnSavedNews = location.pathname === "/saved-news";
-  setIsLoggedIn(true);
-  console.log(isLoggedIn);
+  // setIsLoggedIn(true);
+  // console.log(isLoggedIn);
 
   return (
     <div
@@ -50,30 +52,10 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
           )}
         </button>
 
-        <nav className="nav">
-          <ul className="nav__links">
-            <li>
-              <a href="/" className="nav__link">
-                Inicio
-              </a>
-            </li>
-            {isLoggedIn && (
-              <li>
-                <a href="/saved-news" className="nav__link">
-                  Articulos guardados
-                </a>
-              </li>
-            )}
-            <li>
-              <button
-                onClick={onOpenLoginModal}
-                className="nav__link nav__button"
-              >
-                Iniciar Sesion
-              </button>
-            </li>
-          </ul>
-        </nav>
+        <Navigation
+          isLoggedIn={isLoggedIn}
+          onOpenLoginModal={onOpenLoginModal}
+        />
       </div>
 
       <div className="header__mobile-menu">

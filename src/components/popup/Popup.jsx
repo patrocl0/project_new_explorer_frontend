@@ -1,3 +1,5 @@
+import "./Popup.css";
+
 export const Popup = ({ isOpen, onClose, title, children }) => {
   return (
     <div
