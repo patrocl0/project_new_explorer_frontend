@@ -23,18 +23,6 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
           : "header--search-news"
       } ${isMenuOpen ? "header_opened" : ""}`}
     >
-      {/* 
-    <div className={`header ${isMenuOpen ? "header_opened" : ""}`}>
-      {isMenuOpen && (
-        <div className="header__mobile-menu">
-          <p className="header__email">{userData.email}</p>
-          <button className="header__logout" onClick={signOut}>
-            Cerrar sesión
-          </button>
-          <hr className="header__line" />
-        </div>
-      )} */}
-
       <div className="header__top">
         <div className="header__logo">
           <h1 className="header__title">New Explorer</h1>
@@ -73,8 +61,6 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
           Iniciar Sesion
         </button>
       </div>
-
-      {/* <hr className="header__line" /> */}
 
       {isOnSavedNews ? (
         <SavedNewsHeader />
