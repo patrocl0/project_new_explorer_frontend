@@ -1,10 +1,11 @@
 import "./header.css";
 import { useContext, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { SearchHeader } from "../SearchHeader/SearchHeader";
 import { SavedNewsHeader } from "../SavedNewsHeader/SavedNewsHeader";
 import { AppContext } from "../../context/AppContext";
 import { Navigation } from "../Navigation/Navigation";
+import { removeToken } from "../../utils/token";
 
 export const Header = ({ onOpenLoginModal, onSearch }) => {
   const { setIsLoggedIn, isLoggedIn, userData, setUserData } =
@@ -14,10 +15,11 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
   const location = useLocation();
   const isOnSavedNews = location.pathname === "/saved-news";
 
-  console.log(userData);
-  console.log(isLoggedIn);
-  // setIsLoggedIn(true);
-  // console.log(isLoggedIn);
+  function signOut() {
+    removeToken();
+    setIsLoggedIn(false);
+    Navigate("/");
+  }
 
   return (
     <div
@@ -48,19 +50,41 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
       </div>
 
       <div className="header__mobile-menu">
-        <a href="/" className="header__mobile-link">
+        <Link to="/" className="header__mobile-link">
           Inicio
-        </a>
+        </Link>
 
         {isLoggedIn && (
-          <a href="/saved-news" className="header__mobile-link">
+          <Link to="/saved-news" className="header__mobile-link">
             Articulos guardados
-          </a>
+          </Link>
         )}
 
-        <button onClick={onOpenLoginModal} className="header__mobile-button">
+        {isLoggedIn ? (
+          <button className="header__mobile-button" onClick={signOut}>
+            {userData?.username}{" "}
+            <i className="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        ) : (
+          <button onClick={onOpenLoginModal} className="header__mobile-button">
+            Iniciar Sesion
+          </button>
+        )}
+
+        {/* <button onClick={onOpenLoginModal} className="header__mobile-button">
           Iniciar Sesion
         </button>
+
+        {isLoggedIn ? (
+          <button className="header__mobile-button" onClick={signOut}>
+            {userData?.username}{" "}
+            <i className="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        ) : (
+          <button onClick={onOpenLoginModal} className="nav__link nav__button">
+            Iniciar Sesion
+          </button>
+        )} */}
       </div>
 
       {isOnSavedNews && isLoggedIn ? (

@@ -109,6 +109,18 @@
   margin-bottom: 5px;
 }
 
+.popup__server-error {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.popup__button_disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .popup__button {
   width: 100%;
   margin-top: 10px;
