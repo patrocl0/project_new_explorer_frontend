@@ -3,7 +3,7 @@ import { About } from "../About/About";
 import { NewsCardList } from "../NewsCardList/NewsCardList";
 import { Preloader } from "../Preloader/Preloader";
 
-export const Main = ({ news, hasSearched, isLoading, error }) => {
+export const Main = ({ news, keyword, hasSearched, isLoading, error }) => {
   return (
     <main className="main">
       <div className="main__content">
@@ -17,7 +17,7 @@ export const Main = ({ news, hasSearched, isLoading, error }) => {
           </section>
         ) : hasSearched && news.length > 0 ? (
           <section className="notice">
-            <NewsCardList news={news} />
+            <NewsCardList news={news} keyword={keyword} />
           </section>
         ) : hasSearched && news.length === 0 ? (
           <section className="notice notice_type_empty">

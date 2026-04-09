@@ -7,11 +7,15 @@ import { AppContext } from "../../context/AppContext";
 import { Navigation } from "../Navigation/Navigation";
 
 export const Header = ({ onOpenLoginModal, onSearch }) => {
-  const { setIsLoggedIn, isLoggedIn } = useContext(AppContext);
+  const { setIsLoggedIn, isLoggedIn, userData, setUserData } =
+    useContext(AppContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const location = useLocation();
   const isOnSavedNews = location.pathname === "/saved-news";
+
+  console.log(userData);
+  console.log(isLoggedIn);
   // setIsLoggedIn(true);
   // console.log(isLoggedIn);
 
@@ -40,10 +44,7 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
           )}
         </button>
 
-        <Navigation
-          isLoggedIn={isLoggedIn}
-          onOpenLoginModal={onOpenLoginModal}
-        />
+        <Navigation onOpenLoginModal={onOpenLoginModal} />
       </div>
 
       <div className="header__mobile-menu">
@@ -62,7 +63,7 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
         </button>
       </div>
 
-      {isOnSavedNews ? (
+      {isOnSavedNews && isLoggedIn ? (
         <SavedNewsHeader />
       ) : (
         <SearchHeader onSearch={onSearch} />

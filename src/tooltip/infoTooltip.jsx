@@ -6,7 +6,7 @@ export const InfoTooltip = ({ isOpen, onClose, success }) => {
       <h2 className="popup__title-info">
         {success
           ? "¡El registro se ah completado con exito!"
-          : "Uy, algo salió mal. Por favor, inténtalo de nuevo."}
+          : "Credenciales incorrectas"}
       </h2>
     </Popup>
   );
