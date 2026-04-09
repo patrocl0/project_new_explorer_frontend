@@ -7,11 +7,15 @@ import { AppContext } from "../../context/AppContext";
 import { Navigation } from "../Navigation/Navigation";
 
 export const Header = ({ onOpenLoginModal, onSearch }) => {
-  const { setIsLoggedIn, isLoggedIn } = useContext(AppContext);
+  const { setIsLoggedIn, isLoggedIn, userData, setUserData } =
+    useContext(AppContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const location = useLocation();
   const isOnSavedNews = location.pathname === "/saved-news";
+
+  console.log(userData);
+  console.log(isLoggedIn);
   // setIsLoggedIn(true);
   // console.log(isLoggedIn);
 
@@ -23,18 +27,6 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
           : "header--search-news"
       } ${isMenuOpen ? "header_opened" : ""}`}
     >
-      {/* 
-    <div className={`header ${isMenuOpen ? "header_opened" : ""}`}>
-      {isMenuOpen && (
-        <div className="header__mobile-menu">
-          <p className="header__email">{userData.email}</p>
-          <button className="header__logout" onClick={signOut}>
-            Cerrar sesión
-          </button>
-          <hr className="header__line" />
-        </div>
-      )} */}
-
       <div className="header__top">
         <div className="header__logo">
           <h1 className="header__title">New Explorer</h1>
@@ -52,10 +44,7 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
           )}
         </button>
 
-        <Navigation
-          isLoggedIn={isLoggedIn}
-          onOpenLoginModal={onOpenLoginModal}
-        />
+        <Navigation onOpenLoginModal={onOpenLoginModal} />
       </div>
 
       <div className="header__mobile-menu">
@@ -74,9 +63,7 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
         </button>
       </div>
 
-      {/* <hr className="header__line" /> */}
-
-      {isOnSavedNews ? (
+      {isOnSavedNews && isLoggedIn ? (
         <SavedNewsHeader />
       ) : (
         <SearchHeader onSearch={onSearch} />

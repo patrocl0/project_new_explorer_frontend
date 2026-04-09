@@ -41,6 +41,11 @@
   border-radius: 8px;
   margin: 0;
   font-size: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s ease;
+
+  pointer-events: none;
 }
 
 .card__action {
@@ -64,9 +69,18 @@
   color: black; /* hover negro */
 }
 
+.card__action:hover + .card__tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* seleccionado */
 .card__action--active i {
   color: #2f71e5;
+}
+
+.card__action--disabled {
+  opacity: 0.8;
 }
 
 .card__action--remove i {

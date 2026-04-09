@@ -5,25 +5,36 @@ import { Route, Routes } from "react-router-dom";
 import { Main } from "../Main/Main";
 import { Footer } from "../Footer/Footer";
 import { ModalWithForm } from "../ModalWithForm";
+import * as auth from "../../utils/auth";
 import { SavedNews } from "../SavedNews/SavedNews";
 import { searchNews } from "../../utils/newsApi";
 import { AppContext } from "../../context/AppContext";
 import { InfoTooltip } from "../../tooltip/infoTooltip";
+import { Login } from "../auth/Login";
+import { Register } from "../auth/Register";
+import { getToken, setToken } from "../../utils/token";
+import * as articlesApi from "../../utils/articlesApi";
+import ProtectedRoute from "../../ProtectedRoute/ProtectedRoute";
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [news, setNews] = useState([]);
+  const [savedNews, setSavedNews] = useState([]);
+  const [keyword, setKeyword] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   const [data, setData] = useState({
     email: "",
     password: "",
+    username: "",
   });
 
   const handleChange = (e) => {
@@ -34,57 +45,81 @@ export const App = () => {
     }));
   };
 
-  useEffect(() => {
-    const savedNews = localStorage.getItem("news");
-    if (savedNews) {
-      setNews(JSON.parse(savedNews));
-      setHasSearched(true);
-    }
-  }, []);
-
   const handleOpenLoginModal = () => {
     setIsRegisterModalOpen(false);
     setIsLoginModalOpen(true);
+    resetForm();
   };
 
-  const handleCloseLoginModal = () => setIsLoginModalOpen(false);
   const handleOpenRegisterModal = () => {
     setIsLoginModalOpen(false);
     setIsRegisterModalOpen(true);
+    resetForm();
   };
-  const handleCloseRegisterModal = () => setIsRegisterModalOpen(false);
+  const handleCloseLoginModal = () => {
+    setIsLoginModalOpen(false);
+    resetForm();
+  };
+  const handleCloseRegisterModal = () => {
+    setIsRegisterModalOpen(false);
+    resetForm();
+  };
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Datos de login:", data);
+    const { email, password } = data;
 
-    if (!data.email || !data.password) {
-      console.log("error: Por favor, complete todos los campos");
-    }
+    auth
+      .authorize(email, password)
+      .then(async (data) => {
+        if (data.token) {
+          setToken(data.token);
 
-    // Aquí agregamos la lógica de autenticación
-    setIsLoggedIn(true);
-    setIsLoginModalOpen(false);
+          const userData = await auth.checkToken(data.token);
+          setUserData(userData);
+          setIsLoggedIn(true);
+          setIsLoginModalOpen(false);
 
-    setIsSuccess(true);
-    setIsTooltipOpen(true);
+          setTimeout(() => {
+            setIsSuccess(true);
+            setIsTooltipOpen(true);
+          }, 1500);
 
-    // setTimeout(() => {
-    //   setIsSuccess(false);
-    //   setIsTooltipOpen(false);
-    // }, 1500);
+          resetForm();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+
+        setTimeout(() => {
+          setIsSuccess(false);
+          setIsTooltipOpen(true);
+        }, 1500);
+      });
   };
 
-  const handleRegisterSubmit = (data) => {
+  const handleRegisterSubmit = (e) => {
+    e.preventDefault();
+
     console.log("Datos de registro:", data);
-    // Aquí agregamos la lógica de registro
-    setIsLoggedIn(true);
-    setIsRegisterModalOpen(false);
+    const { email, password, username } = data;
+
+    auth
+      .register(email, password, username)
+      .then(() => {
+        setIsSuccess(true);
+        setIsTooltipOpen(true);
+      })
+      .catch(() => {
+        setIsSuccess(false);
+        setIsTooltipOpen(true);
+      });
   };
 
   const handleSearch = async (search) => {
     if (!search.trim()) return;
+    setKeyword(search);
     setIsLoading(true);
     setError(null);
 
@@ -93,6 +128,7 @@ export const App = () => {
       setNews(results);
       setHasSearched(true);
       localStorage.setItem("news", JSON.stringify(results));
+      localStorage.setItem("keyword", JSON.stringify(search));
     } catch (error) {
       console.error("Error al cargar noticias", error);
       setError(
@@ -103,8 +139,61 @@ export const App = () => {
     }
   };
 
+  const resetForm = () => {
+    setData({
+      email: "",
+      password: "",
+      username: "",
+    });
+  };
+
+  useEffect(() => {
+    const savedNews = localStorage.getItem("news");
+    const keyword = localStorage.getItem("keyword");
+    if (savedNews) {
+      setNews(JSON.parse(savedNews));
+      setHasSearched(true);
+    }
+
+    if (keyword) {
+      setKeyword(JSON.parse(keyword));
+    }
+
+    const jwt = getToken();
+    if (!jwt) return;
+
+    auth
+      .checkToken(jwt)
+      .then((data) => {
+        setIsLoggedIn(true);
+        setUserData(data);
+
+        return articlesApi.getSavedArticles();
+      })
+      .then((articles) => {
+        setSavedNews(articles);
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+      })
+      .finally(() => {
+        setIsAuthChecked(true);
+      });
+  }, []);
+
   return (
-    <AppContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AppContext.Provider
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        userData,
+        setUserData,
+        isAuthChecked,
+        handleOpenLoginModal,
+        savedNews,
+        setSavedNews,
+      }}
+    >
       <div className="app">
         <Header
           onOpenLoginModal={handleOpenLoginModal}
@@ -119,117 +208,42 @@ export const App = () => {
             element={
               <Main
                 news={news}
+                keyword={keyword}
                 hasSearched={hasSearched}
                 isLoading={isLoading}
                 error={error}
               />
             }
           />
-          <Route path="/saved-news" element={<SavedNews news={news} />} />
+          <Route
+            path="/saved-news"
+            element={
+              <ProtectedRoute>
+                <SavedNews news={savedNews} />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
 
         <Footer />
 
-        <ModalWithForm
+        <Login
           isOpen={isLoginModalOpen}
           onClose={handleCloseLoginModal}
           onSubmit={handleLoginSubmit}
-          title="Iniciar Sesión"
-        >
-          <label className="popup_text" htmlFor="register-email">
-            Correo Electronico
-          </label>
-          <input
-            name="email"
-            placeholder="Email"
-            type="email"
-            className="popup__input"
-            value={data.email}
-            onChange={handleChange}
-            id="login-email"
-            required
-          />
-          <label className="popup_text" htmlFor="login-password">
-            Contraseña
-          </label>
-          <input
-            name="password"
-            placeholder="Contraseña"
-            type="password"
-            className="popup__input"
-            value={data.password}
-            onChange={handleChange}
-            id="login-password"
-            required
-          />
+          onSwitchToRegister={handleOpenRegisterModal}
+          data={data}
+          handleChange={handleChange}
+        />
 
-          <button type="submit" className="button popup__button">
-            Iniciar Sesion
-          </button>
-          <p style={{ textAlign: "center" }}>
-            o{" "}
-            <button
-              type="button"
-              className="link-button"
-              onClick={handleOpenRegisterModal}
-            >
-              inscribirse
-            </button>
-          </p>
-        </ModalWithForm>
-
-        <ModalWithForm
+        <Register
           isOpen={isRegisterModalOpen}
           onClose={handleCloseRegisterModal}
           onSubmit={handleRegisterSubmit}
-          title="Registrarse"
-        >
-          <label className="popup_text" htmlFor="register-email">
-            Correo Electronico
-          </label>
-          <input
-            name="email"
-            placeholder="Email"
-            type="email"
-            className="popup__input"
-            id="register-email"
-          />
-          <label className="popup_text" htmlFor="register-password">
-            Contraseña
-          </label>
-          <input
-            name="password"
-            placeholder="Contraseña"
-            type="password"
-            className="popup__input"
-            id="register-password"
-          />
-
-          <label className="popup_text" htmlFor="register-username">
-            Nombre de usuario
-          </label>
-          <input
-            name="username"
-            placeholder="Introduce tu nombre de usuario"
-            type="text"
-            className="popup__input"
-            id="register-username"
-          />
-
-          <button type="submit" className="button popup__button">
-            Inscribirse
-          </button>
-          <p style={{ textAlign: "center" }}>
-            o{" "}
-            <button
-              type="button"
-              className="link-button"
-              onClick={handleOpenLoginModal}
-            >
-              Inicia sesion
-            </button>
-          </p>
-        </ModalWithForm>
+          onSwitchToLogin={handleOpenLoginModal}
+          data={data}
+          handleChange={handleChange}
+        />
 
         <InfoTooltip
           isOpen={isTooltipOpen}
