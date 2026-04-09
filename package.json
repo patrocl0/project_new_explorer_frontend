@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && scp -r ./dist/* brayanestiven1208@34.169.153.71:/home/brayanestiven1208/new_explorer/project_new_explorer_frontend"
   },
   "dependencies": {
     "react": "^19.2.4",
