@@ -16,8 +16,12 @@ export const NewsCardList = ({ news, keyword }) => {
       <h2 className="news-list__title"> Resultados de la busquedad</h2>
 
       <ul className="news-list__cards ">
-        {visibleNews.map((article) => (
-          <NewsCard key={article._id} article={article} keyword={keyword} />
+        {visibleNews.map((article, index) => (
+          <NewsCard
+            key={article._id || index}
+            article={article}
+            keyword={keyword}
+          />
         ))}
       </ul>
 

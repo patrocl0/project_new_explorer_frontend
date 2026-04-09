@@ -270,7 +270,7 @@ export const App = () => {
             path="/saved-news"
             element={
               <ProtectedRoute>
-                <SavedNews news={savedNews} />
+                <SavedNews />
               </ProtectedRoute>
             }
           />

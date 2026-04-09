@@ -1,6 +1,6 @@
 import "./header.css";
 import { useContext, useState } from "react";
-import { Link, Navigate, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SearchHeader } from "../SearchHeader/SearchHeader";
 import { SavedNewsHeader } from "../SavedNewsHeader/SavedNewsHeader";
 import { AppContext } from "../../context/AppContext";
@@ -8,9 +8,9 @@ import { Navigation } from "../Navigation/Navigation";
 import { removeToken } from "../../utils/token";
 
 export const Header = ({ onOpenLoginModal, onSearch }) => {
-  const { setIsLoggedIn, isLoggedIn, userData, setUserData } =
-    useContext(AppContext);
+  const { setIsLoggedIn, isLoggedIn, userData } = useContext(AppContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const location = useLocation();
   const isOnSavedNews = location.pathname === "/saved-news";
@@ -18,7 +18,7 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
   function signOut() {
     removeToken();
     setIsLoggedIn(false);
-    Navigate("/");
+    navigate("/");
   }
 
   return (

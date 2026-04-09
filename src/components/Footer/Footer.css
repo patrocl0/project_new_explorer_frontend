@@ -53,9 +53,9 @@
 @media screen and (max-width: 320px) {
   .footer {
     display: flex;
-    margin: 20px;
+    margin-top: 50px;
     gap: 15px;
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
 
   .footer__enlaces {
