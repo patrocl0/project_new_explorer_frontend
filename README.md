@@ -1,16 +1,78 @@
-# React + Vite
+# 📰 News Explorer (Full Stack)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una aplicación Full Stack donde los usuarios pueden buscar noticias, registrarse/iniciar sesión y guardar artículos favoritos.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🌍 Proyecto en Producción
 
-## React Compiler
+### Frontend
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🔗 https://newexplorer.ignorelist.com
 
-## Expanding the ESLint configuration
+### Backend (API)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🔗 https://api.newexplorer.ignorelist.com
+
+---
+
+## ⚙️ Funcionalidades
+
+- Registro e inicio de sesión con JWT
+- Búsqueda de noticias usando una API externa
+- Guardado de artículos por usuario
+- Eliminación de artículos guardados
+- Rutas protegidas
+- Backend con Express + MongoDB
+
+---
+
+## 🛠 Tecnologías
+
+### Frontend
+
+- React
+- React Router
+- Context API
+- CSS
+
+### Backend
+
+- Node.js
+- Express
+- MongoDB + Mongoose
+- JWT
+- Celebrate / Joi
+- PM2
+- Nginx + SSL (Let's Encrypt)
+
+---
+
+## 📌 Endpoints principales
+
+### Auth
+
+- `POST /signup` — crear usuario
+- `POST /signin` — login y retorna JWT
+
+### Usuario
+
+- `GET /users/me` — retorna información del usuario logueado
+
+### Artículos
+
+- `GET /articles` — obtener artículos guardados por el usuario
+- `POST /articles` — guardar artículo
+- `DELETE /articles/:articleId` — eliminar artículo por ID
+
+---
+
+## 🚀 Instalación (Desarrollo local)
+
+### Backend
+
+```bash
+cd backend
+npm install
+npm run dev
+```
