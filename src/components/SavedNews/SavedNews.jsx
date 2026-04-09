@@ -3,7 +3,7 @@ import { NewsCard } from "../NewsCard/NewsCard";
 import { AppContext } from "../../context/AppContext";
 import * as articlesApi from "../../utils/articlesApi";
 
-export const SavedNews = ({ news }) => {
+export const SavedNews = () => {
   const { savedNews, setSavedNews } = useContext(AppContext);
   const [visibleCount, setVisibleCount] = useState(3);
 
