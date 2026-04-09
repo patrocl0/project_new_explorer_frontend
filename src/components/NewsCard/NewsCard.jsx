@@ -14,6 +14,7 @@ export const NewsCard = ({ article, keyword }) => {
 
   const [isSaved, setIsSaved] = useState(false);
 
+  const saveKeyword = article.keyword;
   const title = article.title;
   const description = article.description || article.text;
   const date = article.publishedAt || article.date;
@@ -40,10 +41,7 @@ export const NewsCard = ({ article, keyword }) => {
     if (isOnSavedNews) {
       try {
         await articlesApi.deleteArticle(article._id);
-
         setSavedNews((prev) => prev.filter((a) => a._id !== article._id));
-
-        console.log("Artículo eliminado");
       } catch (error) {
         console.log("Error eliminando artículo:", error);
       }
@@ -61,8 +59,6 @@ export const NewsCard = ({ article, keyword }) => {
         image: article.urlToImage,
       };
 
-      console.log(articleData);
-
       try {
         const savedArticle = await articlesApi.saveArticle(articleData);
         console.log("Guardado en BD:", savedArticle);
@@ -75,6 +71,8 @@ export const NewsCard = ({ article, keyword }) => {
 
   return (
     <li className="card">
+      {isOnSavedNews && <p className="card__keyword">{saveKeyword}</p>}
+
       <a href={link} target="_blank" rel="noopener noreferrer">
         <img className="card__image" src={image} alt={title} />
       </a>

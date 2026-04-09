@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import { Header } from "../Header/Header";
 import { Route, Routes } from "react-router-dom";
 import { Main } from "../Main/Main";
 import { Footer } from "../Footer/Footer";
-import { ModalWithForm } from "../ModalWithForm";
 import * as auth from "../../utils/auth";
 import { SavedNews } from "../SavedNews/SavedNews";
 import { searchNews } from "../../utils/newsApi";
@@ -19,106 +18,161 @@ import ProtectedRoute from "../../ProtectedRoute/ProtectedRoute";
 export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthChecked, setIsAuthChecked] = useState(false);
+
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const [news, setNews] = useState([]);
   const [savedNews, setSavedNews] = useState([]);
+
   const [keyword, setKeyword] = useState("");
+  const [textTooltip, setTextTooltip] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
+
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
   const [error, setError] = useState(null);
   const [userData, setUserData] = useState(null);
 
+  // FORM STATE
   const [data, setData] = useState({
     email: "",
     password: "",
     username: "",
   });
 
-  const handleChange = (e) => {
+  const [errors, setErrors] = useState({});
+  const [isValid, setIsValid] = useState(false);
+  const [serverError, setServerError] = useState("");
+
+  // RESET FORM
+  const resetForm = useCallback(() => {
+    setData({
+      email: "",
+      password: "",
+      username: "",
+    });
+
+    setErrors({});
+    setIsValid(false);
+    setServerError("");
+  }, []);
+
+  // VALIDACIÓN INSTANTÁNEA
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
+
     setData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  };
 
-  const handleOpenLoginModal = () => {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: e.target.validationMessage,
+    }));
+
+    setIsValid(e.target.closest("form").checkValidity());
+  }, []);
+
+  // MODALS
+  const handleOpenLoginModal = useCallback(() => {
     setIsRegisterModalOpen(false);
     setIsLoginModalOpen(true);
     resetForm();
-  };
+  }, [resetForm]);
 
-  const handleOpenRegisterModal = () => {
+  const handleOpenRegisterModal = useCallback(() => {
     setIsLoginModalOpen(false);
     setIsRegisterModalOpen(true);
     resetForm();
-  };
-  const handleCloseLoginModal = () => {
+  }, [resetForm]);
+
+  const handleCloseLoginModal = useCallback(() => {
     setIsLoginModalOpen(false);
     resetForm();
-  };
-  const handleCloseRegisterModal = () => {
+  }, [resetForm]);
+
+  const handleCloseRegisterModal = useCallback(() => {
     setIsRegisterModalOpen(false);
     resetForm();
-  };
+  }, [resetForm]);
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
+  // LOGIN SUBMIT
+  const handleLoginSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      setServerError("");
 
-    const { email, password } = data;
+      const { email, password } = data;
 
-    auth
-      .authorize(email, password)
-      .then(async (data) => {
-        if (data.token) {
-          setToken(data.token);
+      auth
+        .authorize(email, password)
+        .then(async (data) => {
+          if (data.token) {
+            setToken(data.token);
 
-          const userData = await auth.checkToken(data.token);
-          setUserData(userData);
-          setIsLoggedIn(true);
-          setIsLoginModalOpen(false);
+            const userData = await auth.checkToken(data.token);
 
-          setTimeout(() => {
+            setUserData(userData);
+            setIsLoggedIn(true);
+            setTextTooltip("¡Bienvenido!");
             setIsSuccess(true);
             setIsTooltipOpen(true);
-          }, 1500);
+            setIsLoginModalOpen(false);
 
+            setTimeout(() => {
+              setIsTooltipOpen(false);
+            }, 1500);
+
+            resetForm();
+          }
+        })
+        .catch(() => {
+          setServerError("Correo o contraseña incorrectos.");
+        });
+    },
+    [data, resetForm],
+  );
+
+  // REGISTER SUBMIT
+  const handleRegisterSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      setServerError("");
+
+      const { email, password, username } = data;
+
+      auth
+        .register(email, password, username)
+        .then(() => {
+          setIsRegisterModalOpen(false);
           resetForm();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-
-        setTimeout(() => {
-          setIsSuccess(false);
+          setTextTooltip("¡El registro se ah completado con exito!");
+          setIsSuccess(true);
           setIsTooltipOpen(true);
-        }, 1500);
-      });
-  };
 
-  const handleRegisterSubmit = (e) => {
-    e.preventDefault();
+          setTimeout(() => {
+            setIsTooltipOpen(false);
+          }, 1500);
+        })
+        .catch(() => {
+          setServerError(
+            "No se pudo registrar el usuario. Intenta nuevamente.",
+          );
+          setIsSuccess(false);
+        });
+    },
+    [data, resetForm],
+  );
 
-    console.log("Datos de registro:", data);
-    const { email, password, username } = data;
-
-    auth
-      .register(email, password, username)
-      .then(() => {
-        setIsSuccess(true);
-        setIsTooltipOpen(true);
-      })
-      .catch(() => {
-        setIsSuccess(false);
-        setIsTooltipOpen(true);
-      });
-  };
-
-  const handleSearch = async (search) => {
+  // SEARCH
+  const handleSearch = useCallback(async (search) => {
     if (!search.trim()) return;
+
     setKeyword(search);
     setIsLoading(true);
     setError(null);
@@ -127,6 +181,7 @@ export const App = () => {
       const results = await searchNews(search);
       setNews(results);
       setHasSearched(true);
+
       localStorage.setItem("news", JSON.stringify(results));
       localStorage.setItem("keyword", JSON.stringify(search));
     } catch (error) {
@@ -137,21 +192,14 @@ export const App = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const resetForm = () => {
-    setData({
-      email: "",
-      password: "",
-      username: "",
-    });
-  };
+  }, []);
 
   useEffect(() => {
-    const savedNews = localStorage.getItem("news");
+    const news = localStorage.getItem("news");
     const keyword = localStorage.getItem("keyword");
-    if (savedNews) {
-      setNews(JSON.parse(savedNews));
+
+    if (news) {
+      setNews(JSON.parse(news));
       setHasSearched(true);
     }
 
@@ -160,7 +208,11 @@ export const App = () => {
     }
 
     const jwt = getToken();
-    if (!jwt) return;
+
+    if (!jwt) {
+      setIsAuthChecked(true);
+      return;
+    }
 
     auth
       .checkToken(jwt)
@@ -200,8 +252,6 @@ export const App = () => {
           onSearch={handleSearch}
         />
 
-        {/* {isLoading && <Preloader />} */}
-
         <Routes>
           <Route
             path="/"
@@ -215,6 +265,7 @@ export const App = () => {
               />
             }
           />
+
           <Route
             path="/saved-news"
             element={
@@ -234,6 +285,9 @@ export const App = () => {
           onSwitchToRegister={handleOpenRegisterModal}
           data={data}
           handleChange={handleChange}
+          errors={errors}
+          isValid={isValid}
+          serverError={serverError}
         />
 
         <Register
@@ -243,12 +297,16 @@ export const App = () => {
           onSwitchToLogin={handleOpenLoginModal}
           data={data}
           handleChange={handleChange}
+          errors={errors}
+          isValid={isValid}
+          serverError={serverError}
         />
 
         <InfoTooltip
           isOpen={isTooltipOpen}
           success={isSuccess}
           onClose={() => setIsTooltipOpen(false)}
+          text={textTooltip}
         />
       </div>
     </AppContext.Provider>

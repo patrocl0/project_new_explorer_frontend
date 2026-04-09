@@ -2,7 +2,7 @@ import { useContext } from "react";
 import "./Navigation.css";
 import { AppContext } from "../../context/AppContext";
 import { removeToken } from "../../utils/token";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Navigation = ({ onOpenLoginModal }) => {
   const { setIsLoggedIn, isLoggedIn, userData, setUserData } =
@@ -20,15 +20,15 @@ export const Navigation = ({ onOpenLoginModal }) => {
     <nav className="nav">
       <ul className="nav__links">
         <li>
-          <a href="/" className="nav__link">
+          <Link to="/" className="nav__link">
             Inicio
-          </a>
+          </Link>
         </li>
         {isLoggedIn && (
           <li>
-            <a href="/saved-news" className="nav__link">
-              Articulos guardados
-            </a>
+            <Link to="/saved-news" className="nav__link">
+              Artículos guardados
+            </Link>
           </li>
         )}
         <li>

@@ -7,6 +7,9 @@ export const Login = ({
   onSwitchToRegister,
   data,
   handleChange,
+  errors,
+  isValid,
+  serverError,
 }) => {
   return (
     <ModalWithForm
@@ -29,6 +32,7 @@ export const Login = ({
         id="login-email"
         required
       />
+      <span className="popup__error">{errors?.email}</span>
 
       <label className="popup_text" htmlFor="login-password">
         Contraseña
@@ -45,7 +49,17 @@ export const Login = ({
         required
       />
 
-      <button type="submit" className="button popup__button">
+      <span className="popup__error">{errors?.password}</span>
+
+      {serverError && <p className="popup__server-error">{serverError}</p>}
+
+      <button
+        type="submit"
+        className={`button popup__button ${
+          !isValid ? "popup__button_disabled" : ""
+        }`}
+        disabled={!isValid}
+      >
         Iniciar Sesión
       </button>
 
