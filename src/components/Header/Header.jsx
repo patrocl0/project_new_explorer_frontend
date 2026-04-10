@@ -70,21 +70,6 @@ export const Header = ({ onOpenLoginModal, onSearch }) => {
             Iniciar Sesion
           </button>
         )}
-
-        {/* <button onClick={onOpenLoginModal} className="header__mobile-button">
-          Iniciar Sesion
-        </button>
-
-        {isLoggedIn ? (
-          <button className="header__mobile-button" onClick={signOut}>
-            {userData?.username}{" "}
-            <i className="fa-solid fa-arrow-right-from-bracket"></i>
-          </button>
-        ) : (
-          <button onClick={onOpenLoginModal} className="nav__link nav__button">
-            Iniciar Sesion
-          </button>
-        )} */}
       </div>
 
       {isOnSavedNews && isLoggedIn ? (
