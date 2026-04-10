@@ -7,7 +7,7 @@ export const About = () => {
       <div className="about__container">
         <img className="about__image" src={stivenImg} alt="Autor Stiven" />
         <div className="about__content">
-          <h2 className="about__title">Acerde del autor</h2>
+          <h2 className="about__title">Acerca del autor</h2>
           <p className="about__paragraph">
             Hola, soy <span className="about__highlight">Brayan Mora</span>,
             desarrollador Frontend enfocado en la creación de interfaces
