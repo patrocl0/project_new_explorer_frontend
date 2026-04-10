@@ -157,6 +157,7 @@ export const App = () => {
 
           setTimeout(() => {
             setIsTooltipOpen(false);
+            setIsLoginModalOpen(true);
           }, 1500);
         })
         .catch(() => {

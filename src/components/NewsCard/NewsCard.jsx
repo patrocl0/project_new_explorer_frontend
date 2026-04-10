@@ -59,6 +59,8 @@ export const NewsCard = ({ article, keyword }) => {
         image: article.urlToImage,
       };
 
+      console.log(articleData);
+
       try {
         const savedArticle = await articlesApi.saveArticle(articleData);
         console.log("Guardado en BD:", savedArticle);
